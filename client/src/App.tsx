@@ -1,4 +1,3 @@
-import React from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
