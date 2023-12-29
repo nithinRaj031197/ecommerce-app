@@ -8,3 +8,12 @@ export const getAllProducts = async () => {
     return error;
   }
 };
+
+export const getSingleProduct = async (productId: number) => {
+  try {
+    const res = await axios.get(`https://dummyjson.com/products/${productId}`);
+    return res.data;
+  } catch (error) {
+    return error;
+  }
+};
