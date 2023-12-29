@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { RootState } from "../redux/store";
+import { AppDispatch, RootState } from "../redux/store";
 import { Product } from "../types/global";
 import { FaStar } from "react-icons/fa";
+import { addCart } from "../redux/cartSlice";
 
 const IndividualProduct = () => {
   const [product, setproduct] = useState<Product | undefined>();
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const { productId } = useParams();
 
@@ -21,14 +24,14 @@ const IndividualProduct = () => {
     getIndividualProduct();
   }, []);
 
-  const calculateDiscountPrice = useMemo(() => {
-    return (price: number = 0, percentage: number = 0): number => {
-      const updatedPrice = price - price * (percentage / 100);
+  const calculateDiscountPrice = (price: number = 0, percentage: number = 0): number => {
+    const updatedPrice = price - price * (percentage / 100);
 
-      return +updatedPrice.toFixed(2);
-    };
-  }, []);
+    return +updatedPrice.toFixed(2);
+  };
 
+  const productPrice = product?.price;
+  const productDiscountPercentage = product?.discountPercentage;
   return (
     <>
       <div className="p-3 mb-14">
@@ -61,22 +64,35 @@ const IndividualProduct = () => {
             <div className="flex gap-3 items-center">
               <p className="text-2xl">{product?.discountPercentage}% off</p>
               <p className="line-through text-slate-400   ">${product?.price}</p>
-              <p className="font-bold">
-                ${calculateDiscountPrice(product?.price || 0, product?.discountPercentage || 0)}
-              </p>
+              <p className="font-bold">${calculateDiscountPrice(productPrice || 0, productDiscountPercentage || 0)}</p>
             </div>
           </div>
 
           <div>
             {product?.description}
-
+            <br />
             <i className="text-sm">Products Remaining: {product?.stock}</i>
           </div>
         </div>
       </div>
 
       <div className="fixed bottom-14 h-14 w-full flex ">
-        <button className="bg-white text-center flex-1">Add to Cart</button>
+        <button
+          className="bg-white text-center flex-1"
+          onClick={() => {
+            if (product) {
+              dispatch(
+                addCart({
+                  productId: product.id,
+                  price: product.price,
+                  discountPrice: calculateDiscountPrice(productPrice || 0, productDiscountPercentage || 0),
+                })
+              );
+            }
+          }}
+        >
+          Add to Cart
+        </button>
         <button className="bg-orange-500 text-black flex-1">Buy Now</button>
       </div>
     </>

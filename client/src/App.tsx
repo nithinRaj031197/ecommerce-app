@@ -1,14 +1,21 @@
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "./redux/store";
 import NavBar from "./components/Navbar";
 import BottomNavBar from "./components/BottomNavBar";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import IndividualProduct from "./pages/IndividualProduct";
+import { fetchAllProducts } from "./redux/productsSlice";
+import Cart from "./pages/Cart";
 
 const App = () => {
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, []);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -26,6 +33,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:productId" element={<IndividualProduct />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </section>
 

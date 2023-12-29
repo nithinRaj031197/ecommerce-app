@@ -1,20 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../redux/store";
-import { useEffect } from "react";
-import { fetchAllProducts } from "../redux/productsSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const products = useSelector((storeState: RootState) => storeState.products.products);
-
-  useEffect(() => {
-    dispatch(fetchAllProducts());
-  }, []);
 
   return (
     <div className="grid grid-cols-1  place-items-center gap-5 md:grid-cols-4 p-2">
