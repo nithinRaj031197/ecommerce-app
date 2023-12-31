@@ -1,44 +1,53 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import CartItem from "../components/CartItem";
 import { useNavigate } from "react-router-dom";
-import { BiLeftArrowAlt } from "react-icons/bi";
+import SelectedProducts from "../components/SelectedProducts";
+import CartOrderButton from "../components/CartOrderButton";
+import PageHeader from "../components/PageHeader";
+import { PiShoppingCart } from "react-icons/pi";
+import { PiSmileySadThin } from "react-icons/pi";
 
 const Cart = () => {
   const cart = useSelector((storeStore: RootState) => storeStore.cart);
-  const cartProducts = cart.products;
 
   const navigate = useNavigate();
+
+  if (cart.products.length === 0) {
+    return (
+      <>
+        <PageHeader pageHeaderName="My Cart" />
+        <div className="flex flex-col justify-center items-center mt-3">
+          <div className="relative ">
+            <PiShoppingCart style={{ fontSize: "200px" }} />
+            <PiSmileySadThin className="absolute text-6xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[80%]" />
+          </div>
+          <br />
+          <p className="text-lg font-bold">Your cart is empty</p>
+          <button
+            className="bg-blue-500 p-2 rounded-md cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Shop Now
+          </button>
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="mb-14">
-      <div className="flex font-bold text-2xl gap-3 items-center pt-3">
-        <BiLeftArrowAlt
-          className="text-3xl"
-          onClick={() => {
-            navigate(-1);
-          }}
-        />
-        <p>My Cart</p>
-      </div>
-      <div>
-        {cartProducts?.map((cart) => {
-          return <CartItem key={cart.productId} cartProduct={cart} />;
-        })}
-      </div>
-      <div className="fixed bottom-14 h-14 w-full flex ">
-        <div className="bg-white text-center flex-1">
-          <p className="line-through text-xs text-slate-400">${cart.total.toFixed(2)}</p>
-          <p>${cart.discountTotal.toFixed(2)}</p>
-        </div>
-        <button
-          className="bg-orange-500 text-black flex-1"
-          onClick={() => {
-            navigate("/order");
-          }}
-        >
-          Place Order
-        </button>
-      </div>
+      <PageHeader pageHeaderName="My Cart" />
+      <SelectedProducts />
+
+      <CartOrderButton
+        cart={cart}
+        buttonName="Place Order"
+        onClick={() => {
+          navigate("/order");
+        }}
+      />
     </div>
   );
 };
