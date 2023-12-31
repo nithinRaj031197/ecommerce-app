@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
 import { Product } from "../types/global";
 import { FaStar } from "react-icons/fa";
 import { addCart } from "../redux/cartSlice";
+import SearchProduct from "../components/SearchProduct";
 
 const IndividualProduct = () => {
   const [product, setproduct] = useState<Product | undefined>();
@@ -32,25 +33,39 @@ const IndividualProduct = () => {
 
   const productPrice = product?.price;
   const productDiscountPercentage = product?.discountPercentage;
+
+  const navigate = useNavigate();
+
+  const cartProducts = useSelector((storeState: RootState) => storeState.cart.products);
+
+  const existingProduct = cartProducts.find((cp) => cp.productId === product?.id);
+  const isDisabled = !!existingProduct;
+
   return (
     <>
       <div className="p-3 mb-14">
-        <img className="h-72 w-auto" src={product?.thumbnail} alt={product?.title} />
+        <SearchProduct />
+
+        <img
+          className="h-72 w-auto shadow-slate-500 shadow-sm rounded-lg mt-3"
+          src={product?.thumbnail}
+          alt={product?.title}
+        />
 
         <div className="flex gap-2 justify-center py-2">
           {product?.images?.map((image, index) => {
             return (
               <div key={index} className="h-20 w-20">
-                <img src={image} alt={image} className="h-20 object-fill w-20" />
+                <img src={image} alt={image} className="h-20 object-fill w-20 shadow-slate-500 shadow-sm rounded-sm" />
               </div>
             );
           })}
         </div>
 
         <div>
-          <p>{product?.title}</p>
+          <p className="font-bold text-xl">{product?.title}</p>
           <div className="flex items-center justify-between py-2">
-            <p> Brand: {product?.brand}</p>
+            <i className="font-bold text-sm"> Brand: {product?.brand}</i>
             <div className="flex  ">
               {[...Array(5)].map((_, index) => {
                 const starIndex = index + 1;
@@ -71,7 +86,7 @@ const IndividualProduct = () => {
           <div>
             {product?.description}
             <br />
-            <i className="text-sm">Products Remaining: {product?.stock}</i>
+            <i className="text-sm border p-1 rounded-md ">Products Remaining: {product?.stock}</i>
           </div>
         </div>
       </div>
@@ -81,19 +96,41 @@ const IndividualProduct = () => {
           className="bg-white text-center flex-1"
           onClick={() => {
             if (product) {
+              if (!isDisabled) {
+                dispatch(
+                  addCart({
+                    name: product.title,
+                    productId: product.id,
+                    price: product.price,
+                    discountPrice: calculateDiscountPrice(productPrice || 0, productDiscountPercentage || 0),
+                  })
+                );
+              } else {
+                navigate("/cart");
+              }
+            }
+          }}
+        >
+          {isDisabled ? "Go To Cart" : "Add to Cart"}
+        </button>
+        <button
+          className="bg-orange-500 text-black flex-1"
+          onClick={() => {
+            if (product) {
               dispatch(
                 addCart({
+                  name: product.title,
                   productId: product.id,
                   price: product.price,
                   discountPrice: calculateDiscountPrice(productPrice || 0, productDiscountPercentage || 0),
                 })
               );
+              navigate("/order");
             }
           }}
         >
-          Add to Cart
+          Buy Now
         </button>
-        <button className="bg-orange-500 text-black flex-1">Buy Now</button>
       </div>
     </>
   );

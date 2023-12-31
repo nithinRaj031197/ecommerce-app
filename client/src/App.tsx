@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./redux/store";
-import NavBar from "./components/Navbar";
 import BottomNavBar from "./components/BottomNavBar";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
@@ -8,6 +7,8 @@ import { useEffect } from "react";
 import IndividualProduct from "./pages/IndividualProduct";
 import { fetchAllProducts } from "./redux/productsSlice";
 import Cart from "./pages/Cart";
+import Order from "./pages/Order";
+import Success from "./components/Success";
 
 const App = () => {
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
@@ -27,13 +28,13 @@ const App = () => {
 
   return (
     <main className={isDarkMode ? "dark  h-screen" : ""}>
-      <NavBar />
-
-      <section className=" pt-14 pb-14  md:pt-[10vh] ">
+      <section className=" pb-14  md:pt-[10vh] ">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:productId" element={<IndividualProduct />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/success" element={<Success />} />
         </Routes>
       </section>
 

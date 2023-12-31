@@ -7,6 +7,7 @@ export interface CartProduct {
   originalPrice: number;
   discountPrice: number;
   originalDiscountPrice: number;
+  name: string;
 }
 
 export type CartState = {
@@ -25,22 +26,24 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addCart: (state, action: PayloadAction<{ productId: number; price: number; discountPrice: number }>) => {
-      const { productId, price, discountPrice } = action.payload;
+    addCart: (
+      state,
+      action: PayloadAction<{ name: string; productId: number; price: number; discountPrice: number }>
+    ) => {
+      const { productId, price, discountPrice, name } = action.payload;
 
       const cartProduct = state.products?.find((prod) => prod.productId === productId);
 
       let newCartProduct: CartProduct;
 
       if (cartProduct) {
-        cartProduct.quantity += 1;
-        newCartProduct = cartProduct;
         return;
       }
       state.total += price;
       state.discountTotal += discountPrice;
 
       newCartProduct = {
+        name,
         productId,
         quantity: 1,
         price,

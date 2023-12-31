@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Product } from "../types/global";
-import { getAllProducts, getSingleProduct } from "../api/products";
+import { getAllProducts, getSearchedProducts, getSingleProduct } from "../api/products";
 
 export type ProductsState = {
   status: "idle" | "loading" | "success" | "error";
@@ -40,6 +40,18 @@ export const fetchSingleProduct = createAsyncThunk<Product, number, { rejectValu
   }
 );
 
+export const fetchSearchedProducts = createAsyncThunk<Product[], string, { rejectValue: string }>(
+  "product/searchProducts",
+  async (value, thunkAPI) => {
+    try {
+      const searchedProducts = await getSearchedProducts(value);
+      return searchedProducts.products;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Failed to fetch searched Products");
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -67,6 +79,17 @@ const productsSlice = createSlice({
       .addCase(fetchSingleProduct.rejected, (state, action) => {
         state.status = "error"; // Set error status
         state.error = action.payload ?? "Failed to fetch product"; // Set error message
+      })
+      .addCase(fetchSearchedProducts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchSearchedProducts.fulfilled, (state, action) => {
+        state.status = "success";
+        state.products = action.payload || [];
+      })
+      .addCase(fetchSearchedProducts.rejected, (state, action) => {
+        state.status = "error";
+        state.error = action.payload ?? "Failed to fetch products.";
       });
   },
 });

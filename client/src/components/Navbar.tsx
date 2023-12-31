@@ -1,11 +1,11 @@
 import { CiLight } from "react-icons/ci";
 import { MdOutlineDarkMode } from "react-icons/md";
-import { IoSearchOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { toggleTheme } from "../redux/themeSlice";
 import { FaShoppingCart } from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
+import SearchProduct from "./SearchProduct";
 
 const NavBar = () => {
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
@@ -16,17 +16,7 @@ const NavBar = () => {
     >
       <div className="font-bold text-lg md:text-3xl ">LOGO</div>
 
-      <div className="flex items-center flex-grow md:flex-grow-0  pl-2">
-        <input
-          className={`h-8 md:h-10 md:w-96 w-full rounded-tl-lg rounded-bl-lg p-2 text-black  dark:bg-slate-300 `}
-          placeholder="Search..."
-        />
-        <button
-          className={`text-white bg-orange-400 h-8 md:h-10 w-12 flex items-center justify-center text-2xl font-bold rounded-tr-lg rounded-br-lg`}
-        >
-          <IoSearchOutline />
-        </button>
-      </div>
+      <SearchProduct />
 
       <div className="hidden md:flex gap-5 items-center">
         <div

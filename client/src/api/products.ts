@@ -17,3 +17,12 @@ export const getSingleProduct = async (productId: number) => {
     return error;
   }
 };
+
+export const getSearchedProducts = async (value: string) => {
+  try {
+    const response = await axios.get(`https://dummyjson.com/products/search?q=${value}`);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
