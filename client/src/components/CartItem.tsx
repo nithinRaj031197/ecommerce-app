@@ -5,7 +5,6 @@ import { Product } from "../types/global";
 import { BiUpArrow } from "react-icons/bi";
 import { BiDownArrow } from "react-icons/bi";
 import { CartProduct, updateQuantity } from "../redux/cartSlice";
-import { FaStar } from "react-icons/fa";
 import Image from "./Image";
 import StarRating from "./StarRating";
 import { useNavigate } from "react-router-dom";

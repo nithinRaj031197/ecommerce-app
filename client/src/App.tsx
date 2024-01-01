@@ -1,15 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./redux/store";
 import BottomNavBar from "./components/BottomNavBar";
-import Home from "./pages/Home";
+
 import { Route, Routes } from "react-router-dom";
-import { useEffect } from "react";
-import IndividualProduct from "./pages/IndividualProduct";
+import React, { Suspense, lazy, useEffect } from "react";
 import { fetchAllProducts } from "./redux/productsSlice";
-import Cart from "./pages/Cart";
-import Order from "./pages/Order";
-import Success from "./components/Success";
 import Settings from "./components/Settings";
+
+const Home = lazy(() => import("./pages/Home"));
+const IndividualProduct = React.lazy(() => import("./pages/IndividualProduct"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Order = lazy(() => import("./pages/Order"));
+const Success = lazy(() => import("./components/Success"));
 
 const App = () => {
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
@@ -34,13 +36,15 @@ const App = () => {
   return (
     <main className={` ${isDarkMode ? "dark  h-screen" : ""}`}>
       <section className="relative pb-14">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/product/:productId" element={<IndividualProduct />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/success" element={<Success />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/product/:productId" element={<IndividualProduct />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/order" element={<Order />} />
+            <Route path="/success" element={<Success />} />
+          </Routes>
+        </Suspense>
         {isSettings && <Settings />}
       </section>
 

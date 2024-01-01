@@ -70,15 +70,15 @@ const productsSlice = createSlice({
         state.error = action.payload ?? "Failed to fetch products.";
       })
       .addCase(fetchSingleProduct.pending, (state) => {
-        state.status = "loading"; // Set loading status
+        state.status = "loading";
       })
       .addCase(fetchSingleProduct.fulfilled, (state, action) => {
-        state.status = "success"; // Set success status
-        state.products = [action.payload]; // Store single product in products array or use a separate field for a single product
+        state.status = "success";
+        state.products = [action.payload];
       })
       .addCase(fetchSingleProduct.rejected, (state, action) => {
-        state.status = "error"; // Set error status
-        state.error = action.payload ?? "Failed to fetch product"; // Set error message
+        state.status = "error";
+        state.error = action.payload ?? "Failed to fetch product";
       })
       .addCase(fetchSearchedProducts.pending, (state) => {
         state.status = "loading";

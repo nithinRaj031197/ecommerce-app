@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { closeSettings, openSettings } from "../redux/modalSlice";
+import { closeSettings } from "../redux/modalSlice";
 import { IoCloseSharp } from "react-icons/io5";
 import { RxAvatar } from "react-icons/rx";
 import { CiLight } from "react-icons/ci";
@@ -9,9 +9,6 @@ import { toggleTheme } from "../redux/themeSlice";
 const Settings = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  function openModal() {
-    dispatch(openSettings());
-  }
   function closeModal() {
     dispatch(closeSettings());
   }
