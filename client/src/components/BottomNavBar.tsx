@@ -1,14 +1,18 @@
 import { IoHomeOutline } from "react-icons/io5";
 import { PiShoppingCart } from "react-icons/pi";
-import { RxAvatar } from "react-icons/rx";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 import { useNavigate } from "react-router-dom";
+import { IoSettingsOutline } from "react-icons/io5";
+import { toggleSettings } from "../redux/modalSlice";
 
 const BottomNavBar = () => {
   const cartProducts = useSelector((storeState: RootState) => storeState.cart.products);
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const cartSize = cartProducts?.length;
   return (
@@ -36,9 +40,14 @@ const BottomNavBar = () => {
         <PiShoppingCart />
         <p className="text-xs">Cart</p>
       </div>
-      <div className="flex flex-col items-center py-2">
-        <RxAvatar />
-        <p className="text-xs">Profile</p>
+      <div
+        className="flex flex-col items-center py-2"
+        onClick={() => {
+          dispatch(toggleSettings());
+        }}
+      >
+        <IoSettingsOutline />
+        <p className="text-xs">Settings</p>
       </div>
     </nav>
   );

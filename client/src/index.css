@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.settings {
+  position: fixed;
+  bottom: 0;
+  color: black;
+  background-color: white;
+  width: 100%;
+  animation: open_settings 1s forwards ease-in-out;
+}
+
+@keyframes open_settings {
+  0% {
+    height: 0px;
+  }
+
+  100% {
+    height: 300px;
+  }
+}

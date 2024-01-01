@@ -6,6 +6,7 @@ import CartOrderButton from "../components/CartOrderButton";
 import PageHeader from "../components/PageHeader";
 import { PiShoppingCart } from "react-icons/pi";
 import { PiSmileySadThin } from "react-icons/pi";
+import NavBar from "../components/Navbar";
 
 const Cart = () => {
   const cart = useSelector((storeStore: RootState) => storeStore.cart);
@@ -15,8 +16,13 @@ const Cart = () => {
   if (cart.products.length === 0) {
     return (
       <>
-        <PageHeader pageHeaderName="My Cart" />
-        <div className="flex flex-col justify-center items-center mt-3">
+        <div className=" md:hidden">
+          <PageHeader pageHeaderName="My Cart" />
+        </div>
+        <div className="hidden md:flex">
+          <NavBar />
+        </div>
+        <div className="flex flex-col justify-center items-center  h-screen">
           <div className="relative ">
             <PiShoppingCart style={{ fontSize: "200px" }} />
             <PiSmileySadThin className="absolute text-6xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[80%]" />
@@ -37,18 +43,26 @@ const Cart = () => {
   }
 
   return (
-    <div className="mb-14">
-      <PageHeader pageHeaderName="My Cart" />
-      <SelectedProducts />
+    <>
+      <div className=" md:hidden">
+        <PageHeader pageHeaderName="My Cart" />
+      </div>
+      <div className="hidden md:flex">
+        <NavBar />
+      </div>
 
-      <CartOrderButton
-        cart={cart}
-        buttonName="Place Order"
-        onClick={() => {
-          navigate("/order");
-        }}
-      />
-    </div>
+      <div className="mb-14 md:pt-[10vh]">
+        <SelectedProducts />
+
+        <CartOrderButton
+          cart={cart}
+          buttonName="Place Order"
+          onClick={() => {
+            navigate("/order");
+          }}
+        />
+      </div>
+    </>
   );
 };
 

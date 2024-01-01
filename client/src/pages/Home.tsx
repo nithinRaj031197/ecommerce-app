@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <>
       <NavBar />
-      <div className="grid grid-cols-1 pt-14  place-items-center gap-5 md:grid-cols-4 p-2">
+      <div className="md:pt-[11vh] grid grid-cols-1 pt-[4.5rem]  place-items-center gap-5 md:grid-cols-4 p-2">
         {products?.map((product) => {
           return <ProductItem key={product.id} product={product} />;
         })}
